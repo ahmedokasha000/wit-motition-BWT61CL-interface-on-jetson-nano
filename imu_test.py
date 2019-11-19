@@ -34,7 +34,7 @@ try:
                     counter =0
                     start_byte=0
                     print "packet received"
-                    packet= array.array('i',(0 for i in range(0,11)))
+                    packet= bytearray([0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00])
                 
             
 
