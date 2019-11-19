@@ -20,7 +20,7 @@ try:
 
     counter=0
     start_byte=0
-    packet= array.array('i',(0 for i in range(0,11)))
+    packet=bytearray([0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00])
     while True:
         if serial_port.inWaiting() > 0:
             data = serial_port.read()
