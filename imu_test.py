@@ -24,8 +24,8 @@ try:
     while True:
         if serial_port.inWaiting() > 0:
             data = serial_port.read()
-            if data == 0x55 and counter==0  :
-                print "start detected"
+            if (data == 'U') and (counter==0)  :
+                print "start byte detected"
                 start_byte=1
             if start_byte==1 :
                 packet[counter]=data
