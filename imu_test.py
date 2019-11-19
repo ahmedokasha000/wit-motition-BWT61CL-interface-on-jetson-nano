@@ -2,8 +2,7 @@
 import time
 import serial
 import array
-print("UART Demonstration Program")
-print("NVIDIA Jetson Nano Developer Kit")
+
 
 
 serial_port = serial.Serial(
@@ -18,15 +17,15 @@ time.sleep(1)
 
 try:
     # Send a simple header
-    serial_port.write("UART Demonstration Program\r\n".encode())
-    serial_port.write("NVIDIA Jetson Nano Developer Kit\r\n".encode())
+
     counter=0
     start_byte=0
     packet= array.array('i',(0 for i in range(0,11)))
     while True:
         if serial_port.inWaiting() > 0:
             data = serial_port.read()
-            if data == 0x55 & counter==0  :
+            if data == 0x55 and counter==0  :
+                print "start detected"
                 start_byte=1
             if start_byte==1 :
                 packet[counter]=data
@@ -34,7 +33,7 @@ try:
                 if counter ==11 :
                     counter =0
                     start_byte=0
-                    print(packet)
+                    print "packet received"
                     packet= array.array('i',(0 for i in range(0,11)))
                 
             
