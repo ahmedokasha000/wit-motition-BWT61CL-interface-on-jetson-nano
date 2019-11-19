@@ -34,6 +34,7 @@ try:
                     counter =0
                     start_byte=0
                     print "packet received"
+                    print packet
                     packet= bytearray([0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00])
                 
             
