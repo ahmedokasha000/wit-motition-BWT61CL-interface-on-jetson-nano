@@ -2,7 +2,7 @@
 import time
 import serial
 import array
-
+import numpy as np
 
 
 serial_port = serial.Serial(
@@ -25,24 +25,30 @@ try:
     angVel=[0.0]*3
     angle=[0.0]*3
     packet= [0]*11
+    temparr=np.int16([0,0,0,0])
     def decodePacket() :
-        global packet,angle,angVel,acc,Temp
+        global packet,angle,angVel,acc,Temp,temparr
+        temparr[0]=(packet [3] << 8 | packet [2])
+        temparr[1]=(packet [5] << 8 | packet [4])
+        temparr[2]=(packet [7] << 8 | packet [6])
+        temparr[3]=(packet [9] << 8 | packet [8])
         if packet[1]==0x51 :
-              acc[0] = (packet [3] << 8 | packet [2]) / 32768.0 * 16
-              acc[1] = (packet [5] << 8 | packet [4]) / 32768.0 * 16
-              acc[2] = (packet [7] << 8 | packet [6]) / 32768.0 * 16
-              Temp =   (packet [9] << 8 | packet [8]) / 340.0 + 36.25
+
+              acc[0] =  temparr[0]/ 32768.0 * 16
+              acc[1] =  temparr[1]/ 32768.0 * 16
+              acc[2] =  temparr[2]/ 32768.0 * 16
+              Temp =    temparr[3]/ 340.0 + 36.25
         elif packet[1]==0x52:
-              angVel[0] = (packet [3] << 8 | packet [2]) / 32768.0 * 2000
-              angVel[1] = (packet [5] << 8 | packet [4]) / 32768.0 * 2000
-              angVel[2] = (packet [7] << 8 | packet [6]) / 32768.0 * 2000
-              Temp = (packet [9] << 8 | packet [8]) / 340.0 + 36.25        
+              angVel[0] = temparr[0] / 32768.0 * 2000
+              angVel[1] = temparr[1] / 32768.0 * 2000
+              angVel[2] = temparr[2] / 32768.0 * 2000
+              Temp =  temparr[3] / 340.0 + 36.25        
 
         elif packet[1]==0x53:
-              angle[0] = (packet [3] << 8 | packet [2]) / 32768.0 * 180
-              angle[1] = (packet [5] << 8 | packet [4]) / 32768.0 * 180
-              angle[2] = (packet [7] << 8 | packet [6]) / 32768.0 * 180
-              Temp = (packet [9] << 8 | packet [8]) / 340.0 + 36.25
+              angle[0] = temparr[0] / 32768.0 * 180
+              angle[1] = temparr[1] / 32768.0 * 180
+              angle[2] = temparr[2] / 32768.0 * 180
+              Temp = temparr[3] / 340.0 + 36.25
               print("a :",acc,"w :",angVel,"angle :",angle,"Temp :",Temp)
 
 
